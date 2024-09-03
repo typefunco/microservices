@@ -12,10 +12,12 @@ import (
 
 var MongoClient *mongo.Client
 
+// Models wraps the LogEntry model to interact with MongoDB collections.
 type Models struct {
 	LogEntry LogEntry
 }
 
+// LogEntry represents a log entry in the MongoDB collection.
 type LogEntry struct {
 	ID        string    `bson:"_id,omitempty" json:"id,omitempty"`
 	Name      string    `bson:"name" json:"name"`
@@ -24,6 +26,7 @@ type LogEntry struct {
 	UpdatedAt time.Time `bson:"updated_at" json:"updated_at"`
 }
 
+// New initializes a new instance of Models with the provided MongoDB client.
 func New(client *mongo.Client) Models {
 	MongoClient = client
 
@@ -32,6 +35,8 @@ func New(client *mongo.Client) Models {
 	}
 }
 
+// Insert inserts a new log entry into the MongoDB collection.
+// The CreatedAt and UpdatedAt fields are automatically set to the current time.
 func (l *LogEntry) Insert(entry LogEntry) error {
 	collection := MongoClient.Database("logs").Collection("logs")
 
@@ -51,6 +56,8 @@ func (l *LogEntry) Insert(entry LogEntry) error {
 	return nil
 }
 
+// GetAll retrieves all log entries from the MongoDB collection.
+// It returns a slice of LogEntry and an error if any occurs.
 func (l *LogEntry) GetAll() ([]LogEntry, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -62,6 +69,7 @@ func (l *LogEntry) GetAll() ([]LogEntry, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer cursor.Close(ctx)
 
 	var logs []LogEntry
 	for cursor.Next(ctx) {
@@ -76,6 +84,8 @@ func (l *LogEntry) GetAll() ([]LogEntry, error) {
 	return logs, nil
 }
 
+// GetById retrieves a log entry by its ID from the MongoDB collection.
+// It returns a pointer to LogEntry and an error if any occurs.
 func (l *LogEntry) GetById(id string) (*LogEntry, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -96,6 +106,8 @@ func (l *LogEntry) GetById(id string) (*LogEntry, error) {
 	return &entry, nil
 }
 
+// DropCollection drops the entire MongoDB collection.
+// It deletes all documents and returns an error if any occurs.
 func (l *LogEntry) DropCollection() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -110,6 +122,8 @@ func (l *LogEntry) DropCollection() error {
 	return nil
 }
 
+// Update updates an existing log entry in the MongoDB collection based on its ID.
+// It returns an UpdateResult and an error if any occurs.
 func (l *LogEntry) Update() (*mongo.UpdateResult, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
