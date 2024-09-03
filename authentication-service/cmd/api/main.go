@@ -60,20 +60,20 @@ func openDB(dsn string) (*sql.DB, error) {
 		return nil, err
 	}
 
-	// Выполняем запрос к таблице users, чтобы получить строку с id = 2
-	var (
-		id       int
-		email    string
-		password string
-	)
-	query := `SELECT id, email, password FROM users WHERE id = $1`
-	err = db.QueryRow(query, 2).Scan(&id, &email, &password)
-	if err != nil {
-		return nil, err
-	}
+	// // Выполняем запрос к таблице users, чтобы получить строку с id = 2
+	// var (
+	// 	id       int
+	// 	email    string
+	// 	password string
+	// )
+	// query := `SELECT id, email, password FROM users WHERE id = $1`
+	// err = db.QueryRow(query, 2).Scan(&id, &email, &password)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	// Выводим данные для проверки (можно удалить или заменить на другую логику)
-	log.Printf("User: ID=%d, Email=%s, Password=%s\n", id, email, password)
+	// // Выводим данные для проверки (можно удалить или заменить на другую логику)
+	// log.Printf("User: ID=%d, Email=%s, Password=%s\n", id, email, password)
 
 	return db, nil
 }
