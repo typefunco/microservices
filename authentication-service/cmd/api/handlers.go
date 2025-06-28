@@ -11,6 +11,7 @@ func (app *Config) Auth(w http.ResponseWriter, r *http.Request) {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
+	//hahahaha
 
 	err := app.readJSON(w, r, &requestPayload)
 	if err != nil {
