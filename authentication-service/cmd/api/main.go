@@ -38,6 +38,10 @@ func main() {
 		Models: data.New(conn),
 	}
 
+	// decided to add smth new
+	// ho-ho-ho. new funcs
+	// really mate
+	// let's do it
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: app.routes(),
